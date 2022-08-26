@@ -3,6 +3,8 @@
  */
 package com.waylau.java.demo.nio;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
@@ -19,8 +21,9 @@ import java.util.Set;
  * @since 1.0.0 2019年9月28日
  * @author <a href="https://waylau.com">Way Lau</a>
  */
+@Slf4j
 public class NonBlokingEchoServer {
-	public static int DEFAULT_PORT = 7;
+	public static int DEFAULT_PORT = 7891;
 
 	/**
 	 * @param args
@@ -43,8 +46,8 @@ public class NonBlokingEchoServer {
 			serverChannel.configureBlocking(false);
 			selector = Selector.open();
 			serverChannel.register(selector, SelectionKey.OP_ACCEPT);
-
-			System.out.println("NonBlokingEchoServer已启动，端口：" + port);
+			
+			log.info("NonBlokingEchoServer已启动，端口：" + port);
 		} catch (IOException ex) {
 			ex.printStackTrace();
 			return;
@@ -54,7 +57,7 @@ public class NonBlokingEchoServer {
 			try {
 				selector.select();
 			} catch (IOException e) {
-				System.out.println("NonBlockingEchoServer异常!" + e.getMessage());
+				log.info("NonBlockingEchoServer异常!" + e.getMessage());
 			}
 			Set<SelectionKey> readyKeys = selector.selectedKeys();
 			Iterator<SelectionKey> iterator = readyKeys.iterator();
@@ -67,7 +70,7 @@ public class NonBlokingEchoServer {
 						ServerSocketChannel server = (ServerSocketChannel) key.channel();
 						SocketChannel socketChannel = server.accept();
 
-						System.out.println("NonBlokingEchoServer接受客户端的连接：" + socketChannel);
+						log.info("NonBlokingEchoServer接受客户端的连接：" + socketChannel);
 
 						// 设置为非阻塞
 						socketChannel.configureBlocking(false);
@@ -87,7 +90,7 @@ public class NonBlokingEchoServer {
 						ByteBuffer output = (ByteBuffer) key.attachment();
 						client.read(output);
 
-						System.out.println(client.getRemoteAddress() 
+						log.info(client.getRemoteAddress() 
 								+ " -> NonBlokingEchoServer：" + output.toString());
 
 						key.interestOps(SelectionKey.OP_WRITE);
@@ -100,7 +103,7 @@ public class NonBlokingEchoServer {
 						output.flip();
 						client.write(output);
 
-						System.out.println("NonBlokingEchoServer  -> " 
+						log.info("NonBlokingEchoServer  -> " 
 								+ client.getRemoteAddress() + "：" + output.toString());
 
 						output.compact();
@@ -112,7 +115,7 @@ public class NonBlokingEchoServer {
 					try {
 						key.channel().close();
 					} catch (IOException cex) {
-						System.out.println(
+						log.info(
 								"NonBlockingEchoServer异常!" + cex.getMessage());
 					}
 				}

@@ -3,6 +3,8 @@
  */
 package com.waylau.java.demo.nio;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -17,26 +19,22 @@ import java.nio.channels.SocketChannel;
  * @since 1.0.0 2019年9月28日
  * @author <a href="https://waylau.com">Way Lau</a>
  */
+@Slf4j
 public class NonBlockingEchoClient {
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		if (args.length != 2) {
-			System.err.println("用法: java NonBlockingEchoClient <host name> <port number>");
-			System.exit(1);
-		}
-
-		String hostName = args[0];
-		int portNumber = Integer.parseInt(args[1]);
+		String hostName = "127.0.0.1";
+		int portNumber = NonBlokingEchoServer.DEFAULT_PORT;
 
 		SocketChannel socketChannel = null;
 		try {
 			socketChannel = SocketChannel.open();
 			socketChannel.connect(new InetSocketAddress(hostName, portNumber));
 		} catch (IOException e) {
-			System.err.println("NonBlockingEchoClient异常： " + e.getMessage());
+			log.info("NonBlockingEchoClient异常： " + e.getMessage());
 			System.exit(1);
 		}
 
@@ -62,10 +60,10 @@ public class NonBlockingEchoClient {
 				System.out.println("echo: " + userInput);
 			}
 		} catch (UnknownHostException e) {
-			System.err.println("不明主机，主机名为： " + hostName);
+			log.info("不明主机，主机名为： " + hostName);
 			System.exit(1);
 		} catch (IOException e) {
-			System.err.println("不能从主机中获取I/O，主机名为：" + hostName);
+			log.info("不能从主机中获取I/O，主机名为：" + hostName);
 			System.exit(1);
 		}
 	}
