@@ -18,6 +18,8 @@
 		<netty-all.version>4.1.66.Final</netty-all.version>
 		<jackson.core.version>2.10.1</jackson.core.version>
 		<junit.jupiter.version>5.5.2</junit.jupiter.version>
+		<logback.version>1.2.9</logback.version>
+		<lombok.version>1.18.24</lombok.version>
 	</properties>
 	<build>
 		<plugins>
@@ -50,6 +52,20 @@
 			<artifactId>junit-jupiter</artifactId>
 			<version>${junit.jupiter.version}</version>
 			<scope>test</scope>
+		</dependency>
+		
+		<!-- log -->
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>${logback.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>${lombok.version}</version>
+			<scope>compile</scope>
 		</dependency>
 
 	</dependencies>
